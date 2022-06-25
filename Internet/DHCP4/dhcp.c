@@ -51,7 +51,7 @@
 //*****************************************************************************
 
 #include "socket.h"
-#include "dhcpv4.h"
+#include "dhcp.h"
 
 /* If you want to display debug & processing message, Define _DHCPV4_DEBUG_ in dhcp.h */
 
@@ -704,17 +704,17 @@ int8_t parseDHCPv4MSG(void)
 	return	type;
 }
 
-uint8_t DHCPv4_run(void)
+uint8_t DHCPV4_run(void)
 {
 	uint8_t  type;
 	uint8_t  ret;
 
-	if(dhcpv4_state == STATE_DHCPV4_STOP) return DHCPV4_STOPPED;
+	if(dhcpv4_state == STATE_DHCPV4_STOP) return DHCP_STOPPED;
 
 	if(getSn_SR(DHCPV4_SOCKET) != SOCK_UDP)
 	   socket(DHCPV4_SOCKET, Sn_MR_UDP, DHCPV4_CLIENT_PORT, 0x00);
 
-	ret = DHCPV4_RUNNING;
+	ret = DHCP_RUNNING;
 	type = parseDHCPv4MSG();
 
 
@@ -773,7 +773,7 @@ uint8_t DHCPv4_run(void)
 		break;
 
 		case STATE_DHCPV4_LEASED :
-		   ret = DHCP_IPV4_LEASED;
+		   ret = DHCP_IP_LEASED;
 			if ((dhcpv4_lease_time != INFINITE_LEASETIME) && ((dhcpv4_lease_time/2) < dhcpv4_tick_1s)) {
 
 #ifdef _DHCPV4_DEBUG_
@@ -797,7 +797,7 @@ uint8_t DHCPv4_run(void)
 		break;
 
 		case STATE_DHCPV4_REREQUEST :
-		   ret = DHCP_IPV4_LEASED;
+		   ret = DHCP_IP_LEASED;
 			if (type == DHCPV4_ACK) {
 				dhcpv4_retry_count = 0;
 				if (OLD_allocated_ip[0] != DHCPv4_allocated_ip[0] ||
@@ -805,7 +805,7 @@ uint8_t DHCPv4_run(void)
 				    OLD_allocated_ip[2] != DHCPv4_allocated_ip[2] ||
 				    OLD_allocated_ip[3] != DHCPv4_allocated_ip[3])
 				{
-					ret = DHCP_IPV4_CHANGED;
+					ret = DHCP_IP_CHANGED;
 					dhcp_ipv4_update();
                #ifdef _DHCPV4_DEBUG_
                   printf(">IP changed.\r\n");
@@ -835,7 +835,7 @@ uint8_t DHCPv4_run(void)
 	return ret;
 }
 
-void    DHCPv4_stop(void)
+void    DHCPV4_stop(void)
 {
    close(DHCPV4_SOCKET);
    dhcpv4_state = STATE_DHCPV4_STOP;
@@ -843,7 +843,7 @@ void    DHCPv4_stop(void)
 
 uint8_t check_DHCPv4_timeout(void)
 {
-	uint8_t ret = DHCPV4_RUNNING;
+	uint8_t ret = DHCP_RUNNING;
 
 	if (dhcpv4_retry_count < MAX_DHCPV4_RETRY) {
 		if (dhcpv4_tick_next < dhcpv4_tick_1s) {
@@ -879,7 +879,7 @@ uint8_t check_DHCPv4_timeout(void)
 		switch(dhcpv4_state) {
 			case STATE_DHCPV4_DISCOVER:
 				dhcpv4_state = STATE_DHCPV4_INIT;
-				ret = DHCPV4_FAILED;
+				ret = DHCP_FAILED;
 				break;
 			case STATE_DHCPV4_REQUEST:
 			case STATE_DHCPV4_REREQUEST:
@@ -929,7 +929,7 @@ int8_t check_DHCPv4_leasedIP(void)
 	}
 }
 
-void DHCPv4_init(uint8_t s, uint8_t * buf)
+void DHCPV4_init(uint8_t s, uint8_t * buf)
 {
    uint8_t zeroip[4] = {0,0,0,0};
    getSHAR(DHCPv4_CHADDR);
@@ -966,7 +966,7 @@ void reset_DHCPv4_timeout(void)
 	dhcpv4_retry_count = 0;
 }
 
-void DHCPv4_time_handler(void)
+void DHCPV4_time_handler(void)
 {
 	dhcpv4_tick_1s++;
 }

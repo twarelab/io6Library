@@ -109,7 +109,7 @@ extern "C" {
  * @todo You should select one of @ref _PHY_IO_MODE_PHYCR_ or @ref _PHY_IO_MODE_MII_.
  * @sa ctlwizchip()
  */
-#define _PHY_IO_MODE_                  _PHY_IO_MODE_PHYCR_ //_PHY_IO_MODE_MII_
+#define _PHY_IO_MODE_               _PHY_IO_MODE_PHYCR_  // _PHY_IO_MODE_PHYCR_ //_PHY_IO_MODE_MII_
 
 
 #if (_WIZCHIP_ == W6100)

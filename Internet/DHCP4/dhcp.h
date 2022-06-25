@@ -77,12 +77,12 @@ extern "C" {
  */
 enum
 {
-   DHCPV4_FAILED = 0,  ///< Processing Fail
-   DHCPV4_RUNNING,     ///< Processing DHCP protocol
-   DHCP_IPV4_ASSIGN,   ///< First Occupy IP from DHPC server      (if cbfunc == null, act as default default_ip_assign)
-   DHCP_IPV4_CHANGED,  ///< Change IP address by new ip from DHCP (if cbfunc == null, act as default default_ip_update)
-   DHCP_IPV4_LEASED,   ///< Stand by
-   DHCPV4_STOPPED      ///< Stop processing DHCP protocol
+   DHCP_FAILED = 0,  ///< Processing Fail
+   DHCP_RUNNING,     ///< Processing DHCP protocol
+   DHCP_IP_ASSIGN,   ///< First Occupy IP from DHPC server      (if cbfunc == null, act as default default_ip_assign)
+   DHCP_IP_CHANGED,  ///< Change IP address by new ip from DHCP (if cbfunc == null, act as default default_ip_update)
+   DHCP_IP_LEASED,   ///< Stand by
+   DHCP_STOPPED      ///< Stop processing DHCP protocol
 };
 
 /*
@@ -90,13 +90,13 @@ enum
  * @param s   - socket number
  * @param buf - buffer for processing DHCP message
  */
-void DHCPv4_init(uint8_t s, uint8_t * buf);
+void DHCPV4_init(uint8_t s, uint8_t * buf);
 
 /*
  * @brief DHCP 1s Tick Timer handler
  * @note SHOULD BE register to your system 1s Tick timer handler
  */
-void DHCPv4_time_handler(void);
+void DHCPV4_time_handler(void);
 
 /*
  * @brief Register call back function
@@ -104,7 +104,7 @@ void DHCPv4_time_handler(void);
  * @param ip_update   - callback func when IP is changed
  * @param ip_conflict - callback func when the assigned IP is conflict with others.
  */
-void reg_dhcpv4_cbfunc(void(*ip_assign)(void), void(*ip_update)(void), void(*ip_conflict)(void));
+void reg_dhcp_cbfunc(void(*ip_assign)(void), void(*ip_update)(void), void(*ip_conflict)(void));
 
 /*
  * @brief DHCP client in the main loop
@@ -118,13 +118,13 @@ void reg_dhcpv4_cbfunc(void(*ip_assign)(void), void(*ip_update)(void), void(*ip_
  *
  * @note This function is always called by you main task.
  */
-uint8_t DHCPv4_run(void);
+uint8_t DHCPV4_run(void);
 
 /*
  * @brief Stop DHCP processing
  * @note If you want to restart. call DHCPv4_init() and DHCPv4_run()
  */
-void    DHCPv4_stop(void);
+void    DHCPV4_stop(void);
 
 /* Get Network information assigned from DHCP server */
 /*

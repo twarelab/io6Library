@@ -3526,11 +3526,11 @@ void WIZCHIP_WRITE_BUF(uint32_t AddrSel, uint8_t* pBuf, datasize_t len);
 #define setPHYCR0(phycr0) \
         WIZCHIP_WRITE(_PHYCR0_,(phycr0))
 
-#define setPHYCR1(phycr1) \
-        WIZCHIP_WRITE(_PHYCR1_,(phycr1))
-
 #define getPHYCR1() \
         WIZCHIP_READ(_PHYCR1_)
+
+#define setPHYCR1(phycr1) \
+        WIZCHIP_WRITE(_PHYCR1_,(phycr1))
 
 #define setNET4MR(net4mr) \
         WIZCHIP_WRITE(_NET4MR_,(net4mr))

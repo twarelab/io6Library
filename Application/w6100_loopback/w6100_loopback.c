@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "loopback.h"
+#include "w6100_loopback.h"
 #include "socket.h"
 #include "wizchip_conf.h"
 #include "stdlib.h"
@@ -14,7 +14,7 @@ uint8_t* msg_v4 = "IPv4 mode";
 uint8_t* msg_v6 = "IPv6 mode";
 uint8_t* msg_dual = "Dual IP mode";
 
-int32_t loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loopback_mode)
+int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loopback_mode)
 {
     int32_t ret;
     datasize_t sentsize=0;
@@ -168,7 +168,7 @@ int32_t loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loopback_
 }
 
 
-int32_t loopback_tcpc(uint8_t sn, uint8_t* buf, uint8_t* destip, uint16_t destport, uint8_t loopback_mode)
+int32_t w6100_loopback_tcpc(uint8_t sn, uint8_t* buf, uint8_t* destip, uint16_t destport, uint8_t loopback_mode)
 {
 
     int32_t ret; // return value for SOCK_ERRORs
@@ -318,7 +318,7 @@ int32_t loopback_tcpc(uint8_t sn, uint8_t* buf, uint8_t* destip, uint16_t destpo
     return 1;
 }
 
-int32_t loopback_udps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loopback_mode)
+int32_t w6100_loopback_udps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loopback_mode)
 {
     uint8_t status;
     static uint8_t destip[16] = {0,};

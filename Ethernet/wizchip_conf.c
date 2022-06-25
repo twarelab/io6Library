@@ -609,12 +609,12 @@ void wizphy_setphyconf(wiz_PhyConf* phyconf)
    uint16_t tmp = wiz_mdio_read(PHYRAR_BMCR);
    if(phyconf->mode == PHY_MODE_TE)
    {
-      setPHYCR1(getPHYC1R() | PHYCR1_TE);
+      setPHYCR1(getPHYCR1() | PHYCR1_TE);
       setPHYCR0(PHYCR0_AUTO);
    }
    else
    {
-	  setPHYCR1(getPHYC1R() & ~PHYCR1_TE);
+	  setPHYCR1(getPHYCR1() & ~PHYCR1_TE);
       if(phyconf->mode == PHY_MODE_AUTONEGO) tmp |= BMCR_ANE;
       else
       {

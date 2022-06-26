@@ -34,10 +34,10 @@ int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loo
     {
        mode_msg = msg_dual;
     }
-    #ifdef _LOOPBACK_DEBUG_
+//    #ifdef _LOOPBACK_DEBUG_
         uint8_t dst_ip[16], ext_status;
         uint16_t dst_port;
-    #endif
+//    #endif
         getsockopt(sn, SO_STATUS, &status);
         switch(status)
         {
@@ -45,12 +45,12 @@ int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loo
             ctlsocket(sn,CS_GET_INTERRUPT,&inter);
             if(inter & Sn_IR_CON)
             {
-            #ifdef _LOOPBACK_DEBUG_
+//            #ifdef _LOOPBACK_DEBUG_
                 getsockopt(sn,SO_DESTIP,dst_ip);
                 getsockopt(sn,SO_EXTSTATUS, &ext_status);
                 if(ext_status & TCPSOCK_MODE){
                     //IPv6
-                    printf("%d:Peer IP : %04X:%04X", sn, ((uint16_t)dst_ip[0] << 8) | ((uint16_t)dst_ip[1]),
+                    printf("%d:Connected. Peer IP : %04X:%04X", sn, ((uint16_t)dst_ip[0] << 8) | ((uint16_t)dst_ip[1]),
                             ((uint16_t)dst_ip[2] << 8) | ((uint16_t)dst_ip[3]));
                     printf(":%04X:%04X", ((uint16_t)dst_ip[4] << 8) | ((uint16_t)dst_ip[5]),
                             ((uint16_t)dst_ip[6] << 8) | ((uint16_t)dst_ip[7]));
@@ -62,12 +62,12 @@ int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loo
                 {
                     //IPv4
                     //getSn_DIPR(sn,dst_ip);
-                    printf("%d:Peer IP : %.3d.%.3d.%.3d.%.3d, ",
+                    printf("%d:Connected. Peer IP : %.3d.%.3d.%.3d.%.3d, ",
                             sn, dst_ip[0], dst_ip[1], dst_ip[2], dst_ip[3]);
                 }
                 getsockopt(sn,SO_DESTPORT,&dst_port);
                 printf("Peer Port : %d\r\n", dst_port);
-            #endif
+//            #endif
                 arg_tmp8 = Sn_IR_CON;
                 ctlsocket(sn,CS_CLR_INTERRUPT,&arg_tmp8);
             }
@@ -122,6 +122,8 @@ int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loo
             if((ret = disconnect(sn)) != SOCK_OK) return ret;
                 #ifdef _LOOPBACK_DEBUG_
                     printf("%d:Socket Closed\r\n", sn);
+				#else
+                    printf("%d:Socket Closed\r\n", sn);
                 #endif
             break;
         case SOCK_INIT :
@@ -152,8 +154,10 @@ int32_t w6100_loopback_tcps(uint8_t sn, uint8_t* buf, uint16_t port, uint8_t loo
                 if(tmp != sn)    /* reinitialize the socket */
                 {
                     #ifdef _LOOPBACK_DEBUG_
-                        printf("%d : Fail to create socket.\r\n",sn);
+                        printf("%d : Fail to create socket with return val: %02X.\r\n",sn, tmp);
+                        LL_mDelay(10);
                     #endif
+
                     return SOCKERR_SOCKNUM;
                 }
             #ifdef _LOOPBACK_DEBUG_
